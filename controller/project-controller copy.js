@@ -73,46 +73,72 @@ const getSingleProject = async (req, res) => {
   }
 }
 
-// const updateProjectWithoutImage = async (req, res) => {
-//   const _id = req.params.project_id
+const updateProjectWithoutImage = async (req, res) => {
+  const _id = req.params.project_id
+  console.log(req.body)
 
-//   try {
-//     let singleProject = await Projects.findOne({ _id })
+  try {
+    let singleProject = await Projects.findOne({ _id })
 
-//     if (!singleProject)
-//       return res.send('No project with this "id" is found in database')
+    if (!singleProject)
+      return res.send('No project with this "id" is found in database')
+    // Remove picture from cloudinary
+    // await cloudinary.uploader.destroy(singleProject.image_details.cloudinary_id)
+    // Upload new picture to cloudinary
+    // const result = await cloudinary.uploader.upload(req.file.path)
 
-//       var links = {
-//         netlify:singleProject.link_netlify,
-//         github:singleProject.link_github,
-//       }
+    // // create object for new project image
+    // const image_details = {
+    //   title: singleProject.image_details.title,
+    //   avatar: result.secure_url,
+    //   cloudinary_id: result.public_id,
+    // }
 
-//       var techInStringFormat = req.body.techs
-//       // convert string to array
-//       var techsArray = techInStringFormat.split(',')
+    console.log(req.body.link_netlify)
+    // get all tech values as string
+    if (
+      req.body.link_netlify !== undefined ||
+      req.bod.link_github !== undefined
+    ) {
+      var links = {
+        netlify: req.body.link_netlify || singleProject.link_netlify,
+        github: req.body.link_github || singleProject.link_github,
+      }
+    }
 
-//     let data = {
-//       title: req.body.title || singleProject.title,
-//       description: req.body.description || singleProject.description,
-//     //   links: links || singleProject.links,
-//     //   techs: techsArray || singleProject.techs,
-//     //   is_client_project:
-//     //     req.body.is_client_project || singleProject.is_client_project,
-//     //   is_active: req.body.is_active || singleProject.is_active,
-//       //   image_details: req.body.image_details,
-//     }
+    // get all tech values as string
+    if (
+      req.body.techs &&
+      req.body.techs !== '' &&
+      req.body.techs.length > '2'
+    ) {
+      var techInStringFormat = req.body.techs
+      // convert string to array
+      var techsArray = techInStringFormat.split(',')
+    }
 
-//     const updatedProject = await Projects.findByIdAndUpdate(
-//       req.params.id,
-//       data,
-//       { new: true },
-//     )
+    let data = {
+      title: req.body.title || singleProject.title,
+      description: req.body.description || singleProject.description,
+      links: links || singleProject.links,
+      techs: techsArray || singleProject.techs,
+      is_client_project:
+        req.body.is_client_project || singleProject.is_client_project,
+      is_active: req.body.is_active || singleProject.is_active,
+      //   image_details: req.body.image_details,
+    }
 
-//     res.json(updatedProject)
-//   } catch (error) {
-//     console.log(error)
-//   }
-// }
+    const updatedProject = await Projects.findByIdAndUpdate(
+      req.params.id,
+      data,
+      { new: true },
+    )
+
+    res.json(updatedProject)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 const deleteProject = async (req, res) => {
   const _id = req.params.project_id
@@ -157,7 +183,7 @@ module.exports = {
   getAllProjects,
   getSingleProject,
   createProject,
-  //   updateProjectWithoutImage,
+  updateProjectWithoutImage,
   deleteProject,
 }
 

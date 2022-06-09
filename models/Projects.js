@@ -1,72 +1,64 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const descriptions = new Schema({
-    title: {
-        type: String,
-        default: '',
-    },
-})
-
-const technologies = new Schema({
-    // language_or_framewwork: {
-    //     type: String,
-    //     default: '',
-    // },
-
-    name: {
-        type: String,
-        default: '',
-    },
-}, {
-    _id: false,
-}, )
-
-const links = new Schema({
+const links = new Schema(
+  {
     github: {
-        type: String,
-        default: '',
+      type: String,
+      default: '',
     },
 
     netlify: {
-        type: String,
-        default: '',
+      type: String,
+      required: true,
     },
-}, {
+  },
+  {
     _id: false,
-}, )
+  },
+)
 
-const image_details = new Schema({
+const image_details = new Schema(
+  {
     title: {
-        type: String,
-        default: '',
+      type: String,
+      required: true,
     },
     cloudinary_id: {
-        type: String,
-        default: '',
+      type: String,
+      required: true,
     },
     avatar: {
-        type: String,
-        default: '',
+      type: String,
+      required: true,
     },
-}, {
+  },
+  {
     _id: false,
-}, )
+  },
+)
 
 //
 const Projects = new Schema({
-    title: {
-        type: String,
-        required: true,
-    },
-    image_details: image_details,
-    descriptions: [descriptions],
-    technologies: [technologies],
-    links: links,
-    is_active: {
-        type: Boolean,
-        default: false,
-    },
+  title: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  techs: [String],
+  image_details: image_details,
+  links: links,
+  is_client_project: {
+    type: Boolean,
+    default: false,
+  },
+  is_active: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 module.exports = mongoose.model('Projects', Projects)

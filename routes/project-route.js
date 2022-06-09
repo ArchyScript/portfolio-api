@@ -1,18 +1,19 @@
 const router = require('express').Router()
 const {
-    getAllUsers,
-    getSingleUser,
-    createUserProfile,
-    updateUser,
-    deleteUser,
+  getAllProjects,
+  getSingleProject,
+  createProject,
+  //   updateProjectWithoutImage,
+  deleteProject,
 } = require('../controller/project-controller')
 const { upload } = require('../utilities/multer')
 
 //
-router.get('/', getAllUsers)
-router.get('/:id', getSingleUser)
-router.post('/', upload.single('image'), createUserProfile)
-router.patch('/:id', upload.single('image'), updateUser)
-router.delete('/:id', deleteUser)
+router.get('/', getAllProjects)
+router.get('/:project_id', getSingleProject)
+router.post('/', upload.single('project_image'), createProject)
+// router.patch('/:project_id', updateProjectWithoutImage)
+// router.patch('/:project_id', upload.single('project_image'), updateProject)
+router.delete('/:project_id', deleteProject)
 
 module.exports = router
